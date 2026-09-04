@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { login } from "@/lib/api";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const schema = z.object({
   email: z.string().email("Invalid email"),
@@ -79,9 +80,16 @@ export default function AdminLogin() {
           >
             {isSubmitting ? "Logging in..." : "Login"}
           </button>
-        </form>
+                </form>
+        
+        <div className="mt-6 text-center">
+          <Link href="/" className="text-sm text-gray-500 hover:text-gray-700 flex items-center justify-center gap-1">
+            &larr; Back to Website
+          </Link>
+        </div>
       </div>
     </div>
   );
 }
+
 
