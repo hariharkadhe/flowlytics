@@ -95,7 +95,7 @@ export default function Home() {
                   onClick={(e) => {
                     e.stopPropagation();
                     setSelectedPlanId(plan._id);
-                    alert(`Proceeding to checkout with the ${plan.name} plan!`);
+                    setCheckoutPlan(plan);
                   }}
                   className={`w-full py-3 px-6 rounded-xl font-bold mb-8 transition ${isSelected ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-100 text-gray-900 hover:bg-gray-200'}`}
                 >
@@ -146,5 +146,6 @@ export default function Home() {
     </div>
   );
 }
+
 
 
