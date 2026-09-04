@@ -1,4 +1,4 @@
-"use client";
+ï»¿"use client";
 import { usePathname } from "next/navigation";
 
 export default function Footer() {
@@ -10,7 +10,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4">
         <h2 className="text-2xl font-bold text-white mb-4">Flowmetrics</h2>
         <p className="mb-6">Empowering remote teams to achieve deep work and clarity.</p>
-        <p className="text-sm">© {new Date().getFullYear()} Flowmetrics. All rights reserved.</p>
+        <p className="text-sm">&copy; {new Date().getFullYear()} Flowmetrics. All rights reserved.</p>
       </div>
     </footer>
   );
