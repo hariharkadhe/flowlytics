@@ -11,8 +11,9 @@ export async function GET(req: NextRequest) {
     await connectDB();
     const user = await User.findById(decoded.id).select("-password");
     if (!user) return NextResponse.json({ success: false, message: "User not found" }, { status: 404 });
-    return NextResponse.json({ success: true, data: user });
+    return NextResponse.json({ success: true, user });
   } catch (e: any) {
     return NextResponse.json({ success: false, message: e.message }, { status: 401 });
   }
 }
+
