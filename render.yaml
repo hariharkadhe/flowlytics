@@ -1,0 +1,19 @@
+﻿services:
+  - type: web
+    name: flowmetrics-backend
+    env: node
+    region: singapore
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npx tsx src/server.ts
+    envVars:
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: CLIENT_URL
+        sync: false
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
