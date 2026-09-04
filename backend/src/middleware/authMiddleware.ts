@@ -25,3 +25,13 @@ export const protect = async (req: AuthRequest, res: Response, next: NextFunctio
     res.status(401).json({ success: false, message: 'Not authorized, no token' });
   }
 };
+
+export const requireRole = (role: string) => {
+  return (req: AuthRequest, res: Response, next: NextFunction): void => {
+    if (req.user && req.user.role === role) {
+      next();
+    } else {
+      res.status(403).json({ success: false, message: 'Forbidden: Insufficient permissions' });
+    }
+  };
+};
