@@ -1,7 +1,7 @@
 ﻿"use client";
 import { useEffect, useState } from "react";
 import { getPricingPlans } from "@/lib/api";
-import { Check, Star } from "lucide-react";
+import { Check, Star, X } from "lucide-react";
 import Link from "next/link";
 
 const testimonials = [
@@ -14,6 +14,7 @@ export default function Home() {
   const [plans, setPlans] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
+  const [checkoutPlan, setCheckoutPlan] = useState<any | null>(null);
 
   useEffect(() => {
     getPricingPlans().then(res => {
@@ -113,7 +114,37 @@ export default function Home() {
           </div>
         )}
       </section>
+      {/* Checkout Modal */}
+      {checkoutPlan && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+              <h3 className="text-xl font-bold text-gray-900">Checkout</h3>
+              <button onClick={() => setCheckoutPlan(null)} className="text-gray-400 hover:text-gray-600 transition">
+                <X size={24} />
+              </button>
+            </div>
+            <div className="p-6 bg-gray-50">
+              <p className="text-gray-600 mb-4 text-center">You are about to subscribe to the</p>
+              <div className="bg-white border border-gray-200 rounded-2xl p-6 text-center shadow-sm mb-6">
+                <h4 className="text-2xl font-bold text-blue-600 mb-2">{checkoutPlan.name} Plan</h4>
+                <div className="text-gray-900">
+                  <span className="text-4xl font-extrabold">${checkoutPlan.price}</span>
+                  <span className="text-gray-500">/{checkoutPlan.billingCycle === 'monthly' ? 'mo' : checkoutPlan.billingCycle}</span>
+                </div>
+              </div>
+              <button onClick={() => {
+                setCheckoutPlan(null);
+                setSelectedPlanId(checkoutPlan._id);
+              }} className="w-full bg-blue-600 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-700 hover:scale-[1.02] transition transform">
+                Confirm & Pay
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+
 
