@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,7 +25,7 @@ export default function AdminLogin() {
     try {
       setError("");
       const res = await login(data);
-      if (res.success && res.role === "ADMIN") {
+      if (res.success && res.user?.role === "ADMIN") {
         localStorage.setItem("token", res.token);
         router.push("/admin");
       } else {
@@ -84,3 +84,4 @@ export default function AdminLogin() {
     </div>
   );
 }
+
