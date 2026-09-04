@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useEffect, useState } from "react";
 import { getPricingPlans } from "@/lib/api";
 import { Check, Star } from "lucide-react";
@@ -13,6 +13,7 @@ const testimonials = [
 export default function Home() {
   const [plans, setPlans] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
 
   useEffect(() => {
     getPricingPlans().then(res => {
@@ -32,9 +33,8 @@ export default function Home() {
           Flowmetrics provides deep insights into your team's workflow, helping remote and hybrid teams achieve clarity, balance workloads, and deliver faster.
         </p>
         <div className="flex flex-wrap justify-center gap-4">
-          <Link href="#pricing" className="bg-blue-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-700 transition shadow-lg shadow-blue-200">
-            Start Free Trial
-          </Link>
+          <a href="#pricing" className="bg-blue-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-700 transition shadow-lg shadow-blue-200">
+            Start Free Trial`n          </a>
           <Link href="/blog" className="bg-white text-gray-900 border-2 border-gray-200 px-8 py-4 rounded-full font-bold text-lg hover:border-gray-300 transition">
             Read Our Blog
           </Link>
@@ -80,16 +80,25 @@ export default function Home() {
           <div className="text-center text-gray-500">Loading pricing plans...</div>
         ) : (
           <div className="grid md:grid-cols-3 gap-8 items-center max-w-6xl mx-auto">
-            {plans.map((plan) => (
-              <div key={plan._id} className={`bg-white rounded-3xl p-8 border ${plan.highlighted ? 'border-blue-600 shadow-xl shadow-blue-100 scale-105' : 'border-gray-200 shadow-sm'}`}>
+            {plans.map((plan) => {
+              const isSelected = selectedPlanId ? selectedPlanId === plan._id : plan.highlighted;
+              return (
+              <div key={plan._id} className={`bg-white rounded-3xl p-8 border transition-all duration-300 ${isSelected ? 'border-blue-600 shadow-xl shadow-blue-100 scale-105' : 'border-gray-200 shadow-sm hover:border-blue-300 cursor-pointer'}`} onClick={() => setSelectedPlanId(plan._id)}>
                 {plan.highlighted && <div className="text-blue-600 text-sm font-bold tracking-wider uppercase mb-2">Most Popular</div>}
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
                 <div className="mb-6">
                   <span className="text-4xl font-extrabold text-gray-900">${plan.price}</span>
                   <span className="text-gray-500">/{plan.billingCycle === 'monthly' ? 'mo' : plan.billingCycle}</span>
                 </div>
-                <button className={`w-full py-3 px-6 rounded-xl font-bold mb-8 transition ${plan.highlighted ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-100 text-gray-900 hover:bg-gray-200'}`}>
-                  Get Started
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedPlanId(plan._id);
+                    alert(`Proceeding to checkout with the ${plan.name} plan!`);
+                  }}
+                  className={`w-full py-3 px-6 rounded-xl font-bold mb-8 transition ${isSelected ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-100 text-gray-900 hover:bg-gray-200'}`}
+                >
+                  {isSelected ? 'Selected' : 'Get Started'}
                 </button>
                 <div className="space-y-4">
                   {plan.features.map((feature: string, i: number) => (
@@ -100,10 +109,11 @@ export default function Home() {
                   ))}
                 </div>
               </div>
-            ))}
+            )})}
           </div>
         )}
       </section>
     </div>
   );
 }
+
