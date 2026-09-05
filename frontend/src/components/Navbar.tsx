@@ -5,7 +5,7 @@ import { ThemeToggle } from "./ThemeToggle";
 
 export default function Navbar() {
   const pathname = usePathname();
-  if (pathname.startsWith("/admin")) return null;
+  if (pathname.startsWith("/admin") || pathname.startsWith("/dashboard")) return null;
 
   return (
     <nav className="border-b dark:border-slate-800 bg-white/80 dark:bg-[#0B0C10]/80 backdrop-blur-md sticky top-0 z-50 transition-colors duration-300">

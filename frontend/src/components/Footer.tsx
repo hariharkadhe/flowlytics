@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function Footer() {
   const pathname = usePathname();
-  if (pathname.startsWith("/admin")) return null;
+  if (pathname.startsWith("/admin") || pathname.startsWith("/dashboard")) return null;
 
   return (
     <footer className="bg-white dark:bg-[#0B0C10] border-t dark:border-slate-800 py-12 mt-auto transition-colors duration-300">
