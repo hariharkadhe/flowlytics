@@ -37,7 +37,7 @@ export default function Home() {
         </p>
         <div className="flex flex-wrap justify-center gap-4">
           <a href="#pricing" className="bg-blue-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-700 transition shadow-lg shadow-blue-200">
-            Start Free Trial`n          </a>
+            Start Free Trial</a>
           <Link href="/blog" className="bg-white text-gray-900 border-2 border-gray-200 px-8 py-4 rounded-full font-bold text-lg hover:border-gray-300 transition">
             Read Our Blog
           </Link>
@@ -148,6 +148,7 @@ export default function Home() {
     </div>
   );
 }
+
 
 
 
