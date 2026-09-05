@@ -15,6 +15,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
   const [checkoutPlan, setCheckoutPlan] = useState<any | null>(null);
+  const [checkoutState, setCheckoutState] = useState<'idle' | 'processing' | 'success'>('idle');
 
   useEffect(() => {
     getPricingPlans().then(res => {
@@ -146,6 +147,7 @@ export default function Home() {
     </div>
   );
 }
+
 
 
 
