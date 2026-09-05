@@ -88,7 +88,7 @@ export default function Home() {
             {plans.map((plan) => {
               const isSelected = selectedPlanId ? selectedPlanId === plan._id : plan.highlighted;
               return (
-              <div key={plan._id} className={g-white rounded-3xl p-8 border transition-all duration-300 $} onClick={() => setSelectedPlanId(plan._id)}>
+              <div key={plan._id} className={`bg-white rounded-3xl p-8 border transition-all duration-300 ${isSelected ? 'border-blue-600 shadow-xl shadow-blue-100 scale-105' : 'border-gray-200 shadow-sm hover:border-blue-300 cursor-pointer'}`} onClick={() => setSelectedPlanId(plan._id)}>
                 {plan.highlighted && <div className="text-blue-600 text-sm font-bold tracking-wider uppercase mb-2">Most Popular</div>}
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
                 <div className="mb-6">
@@ -101,7 +101,7 @@ export default function Home() {
                     setSelectedPlanId(plan._id);
                     setCheckoutPlan(plan);
                   }}
-                  className={w-full py-3 px-6 rounded-xl font-bold mb-8 transition $}
+                  className={`w-full py-3 px-6 rounded-xl font-bold mb-8 transition ${isSelected ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-100 text-gray-900 hover:bg-gray-200'}`}
                 >
                   {isSelected ? 'Selected' : 'Get Started'}
                 </button>
