@@ -1,8 +1,9 @@
 ﻿"use client";
 import { useEffect, useState } from "react";
-import { getPricingPlans } from "@/lib/api";`nimport { useRouter } from "next/navigation";
+import { getPricingPlans } from "@/lib/api";
 import { Check, Star, X } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const testimonials = [
   { name: "Sarah Jenkins", role: "CTO at TechCorp", content: "Flowmetrics transformed how we measure engineering effort. It's not about lines of code anymore, it's about impact." },
@@ -37,7 +38,8 @@ export default function Home() {
         </p>
         <div className="flex flex-wrap justify-center gap-4">
           <a href="#pricing" className="bg-blue-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-700 transition shadow-lg shadow-blue-200">
-            Start Free Trial</a>
+            Start Free Trial
+          </a>
           <Link href="/blog" className="bg-white text-gray-900 border-2 border-gray-200 px-8 py-4 rounded-full font-bold text-lg hover:border-gray-300 transition">
             Read Our Blog
           </Link>
@@ -86,7 +88,7 @@ export default function Home() {
             {plans.map((plan) => {
               const isSelected = selectedPlanId ? selectedPlanId === plan._id : plan.highlighted;
               return (
-              <div key={plan._id} className={`bg-white rounded-3xl p-8 border transition-all duration-300 ${isSelected ? 'border-blue-600 shadow-xl shadow-blue-100 scale-105' : 'border-gray-200 shadow-sm hover:border-blue-300 cursor-pointer'}`} onClick={() => setSelectedPlanId(plan._id)}>
+              <div key={plan._id} className={g-white rounded-3xl p-8 border transition-all duration-300 $} onClick={() => setSelectedPlanId(plan._id)}>
                 {plan.highlighted && <div className="text-blue-600 text-sm font-bold tracking-wider uppercase mb-2">Most Popular</div>}
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
                 <div className="mb-6">
@@ -99,7 +101,7 @@ export default function Home() {
                     setSelectedPlanId(plan._id);
                     setCheckoutPlan(plan);
                   }}
-                  className={`w-full py-3 px-6 rounded-xl font-bold mb-8 transition ${isSelected ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-100 text-gray-900 hover:bg-gray-200'}`}
+                  className={w-full py-3 px-6 rounded-xl font-bold mb-8 transition $}
                 >
                   {isSelected ? 'Selected' : 'Get Started'}
                 </button>
@@ -116,41 +118,67 @@ export default function Home() {
           </div>
         )}
       </section>
+
       {/* Checkout Modal */}
       {checkoutPlan && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
             <div className="p-6 border-b border-gray-100 flex justify-between items-center">
-              <h3 className="text-xl font-bold text-gray-900">Checkout</h3>
-              <button onClick={() => setCheckoutPlan(null)} className="text-gray-400 hover:text-gray-600 transition">
-                <X size={24} />
-              </button>
+              <h3 className="text-xl font-bold text-gray-900">
+                {checkoutState === 'idle' ? 'Checkout' : checkoutState === 'processing' ? 'Processing...' : 'Success!'}
+              </h3>
+              {checkoutState !== 'processing' && (
+                <button onClick={() => { setCheckoutPlan(null); setCheckoutState('idle'); }} className="text-gray-400 hover:text-gray-600 transition">
+                  <X size={24} />
+                </button>
+              )}
             </div>
-            <div className="p-6 bg-gray-50">
-              <p className="text-gray-600 mb-4 text-center">You are about to subscribe to the</p>
-              <div className="bg-white border border-gray-200 rounded-2xl p-6 text-center shadow-sm mb-6">
-                <h4 className="text-2xl font-bold text-blue-600 mb-2">{checkoutPlan.name} Plan</h4>
-                <div className="text-gray-900">
-                  <span className="text-4xl font-extrabold">${checkoutPlan.price}</span>
-                  <span className="text-gray-500">/{checkoutPlan.billingCycle === 'monthly' ? 'mo' : checkoutPlan.billingCycle}</span>
+            
+            {checkoutState === 'idle' && (
+              <div className="p-6 bg-gray-50">
+                <p className="text-gray-600 mb-4 text-center">You are about to subscribe to the</p>
+                <div className="bg-white border border-gray-200 rounded-2xl p-6 text-center shadow-sm mb-6">
+                  <h4 className="text-2xl font-bold text-blue-600 mb-2">{checkoutPlan.name} Plan</h4>
+                  <div className="text-gray-900">
+                    <span className="text-4xl font-extrabold">${checkoutPlan.price}</span>
+                    <span className="text-gray-500">/{checkoutPlan.billingCycle === 'monthly' ? 'mo' : checkoutPlan.billingCycle}</span>
+                  </div>
                 </div>
+                <button onClick={() => {
+                  setCheckoutState('processing');
+                  setTimeout(() => {
+                    setCheckoutState('success');
+                    setTimeout(() => {
+                      setCheckoutPlan(null);
+                      setCheckoutState('idle');
+                      router.push('/dashboard');
+                    }, 2000);
+                  }, 1500);
+                }} className="w-full bg-blue-600 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-700 hover:scale-[1.02] transition transform">
+                  Confirm & Pay
+                </button>
               </div>
-              <button onClick={() => {
-                setCheckoutPlan(null);
-                setSelectedPlanId(checkoutPlan._id);
-              }} className="w-full bg-blue-600 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-700 hover:scale-[1.02] transition transform">
-                Confirm & Pay
-              </button>
-            </div>
+            )}
+
+            {checkoutState === 'processing' && (
+              <div className="p-12 flex flex-col items-center justify-center bg-gray-50">
+                <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mb-4"></div>
+                <p className="text-gray-600 font-medium animate-pulse">Processing secure payment...</p>
+              </div>
+            )}
+
+            {checkoutState === 'success' && (
+              <div className="p-12 flex flex-col items-center justify-center bg-green-50">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                  <Check size={32} className="text-green-600" />
+                </div>
+                <h4 className="text-2xl font-bold text-green-900 mb-2">Payment Successful!</h4>
+                <p className="text-green-700 text-center">Welcome to the {checkoutPlan.name} plan. Redirecting to dashboard...</p>
+              </div>
+            )}
           </div>
         </div>
       )}
     </div>
   );
 }
-
-
-
-
-
-
