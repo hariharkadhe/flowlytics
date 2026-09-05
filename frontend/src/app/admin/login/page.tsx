@@ -1,11 +1,12 @@
 ﻿"use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { login } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Mail, Lock, Key, ArrowRight, CheckCircle, X } from "lucide-react";
 
 const schema = z.object({
   email: z.string().email("Invalid email"),
@@ -17,8 +18,9 @@ type FormData = z.infer<typeof schema>;
 export default function AdminLogin() {
   const router = useRouter();
   const [error, setError] = useState("");
+  const [showToast, setShowToast] = useState(false);
   
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormData>({
+  const { register, handleSubmit, setValue, formState: { errors, isSubmitting } } = useForm<FormData>({
     resolver: zodResolver(schema),
   });
 
@@ -37,59 +39,96 @@ export default function AdminLogin() {
     }
   };
 
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-      <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Flowmetrics</h1>
-          <p className="text-gray-500 mt-2">Admin Dashboard Login</p>
-        </div>
-        
-        {error && (
-          <div className="bg-red-50 text-red-600 p-3 rounded-lg mb-4 text-sm">
-            {error}
-          </div>
-        )}
+  const fillDefaultCredentials = () => {
+    setValue("email", "admin@example.com");
+    setValue("password", "Admin@12345");
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 3000);
+  };
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-            <input
-              {...register("email")}
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-              placeholder="admin@example.com"
-            />
-            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-            <input
-              type="password"
-              {...register("password")}
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-              placeholder="��������"
-            />
-            {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
-          </div>
-          
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
-          >
-            {isSubmitting ? "Logging in..." : "Login"}
-          </button>
-                </form>
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#0B0C10] p-4 text-slate-200 font-sans">
+      <div className="w-full max-w-md">
         
-        <div className="mt-6 text-center">
-          <Link href="/" className="text-sm text-gray-500 hover:text-gray-700 flex items-center justify-center gap-1">
-            &larr; Back to Website
+        <div className="bg-[#13141C] border border-slate-800 rounded-2xl shadow-2xl p-8 mb-6">
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-lg mb-6 text-sm flex items-center justify-center">
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+            <div>
+              <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Admin Email</label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
+                  <Mail size={18} />
+                </div>
+                <input
+                  {...register("email")}
+                  className="w-full pl-10 pr-4 py-3 bg-[#0B0C10] border border-slate-800 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition text-slate-200 placeholder-slate-600"
+                  placeholder="admin@example.com"
+                />
+              </div>
+              {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email.message}</p>}
+            </div>
+            
+            <div>
+              <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Password</label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
+                  <Lock size={18} />
+                </div>
+                <input
+                  type="password"
+                  {...register("password")}
+                  className="w-full pl-10 pr-4 py-3 bg-[#0B0C10] border border-slate-800 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition text-slate-200 placeholder-slate-600 tracking-widest"
+                  placeholder="••••••••••••"
+                />
+              </div>
+              {errors.password && <p className="text-red-400 text-xs mt-1">{errors.password.message}</p>}
+            </div>
+            
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-bold py-3 rounded-xl hover:opacity-90 transition disabled:opacity-50 flex items-center justify-center gap-2 mt-2"
+            >
+              {isSubmitting ? "Authenticating..." : "Authenticate & Enter CMS"}
+              {!isSubmitting && <ArrowRight size={18} />}
+            </button>
+          </form>
+
+          <div className="mt-8 pt-6 border-t border-slate-800">
+            <button
+              type="button"
+              onClick={fillDefaultCredentials}
+              className="w-full bg-slate-800/50 hover:bg-slate-800 text-slate-300 font-medium py-3 rounded-xl transition flex items-center justify-center gap-2 border border-slate-700/50 text-sm"
+            >
+              <Key size={16} className="text-slate-400" />
+              Fill Default Admin Credentials
+            </button>
+            <p className="text-center text-xs text-slate-500 mt-4">
+              Default: <span className="text-slate-300">admin@example.com</span> / <span className="text-slate-300">Admin@12345</span>
+            </p>
+          </div>
+        </div>
+
+        <div className="text-center">
+          <Link href="/" className="text-sm text-slate-500 hover:text-slate-300 transition flex items-center justify-center gap-2">
+            &larr; Return to Public Website
           </Link>
         </div>
+      </div>
+
+      {/* Toast Notification */}
+      <div className={`fixed bottom-6 right-6 bg-[#062417] border border-[#0A3D28] text-[#34D399] px-4 py-3 rounded-xl flex items-center gap-3 shadow-lg shadow-black/50 transition-all duration-300 transform ${showToast ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0 pointer-events-none'}`}>
+        <CheckCircle size={20} />
+        <span className="font-medium text-sm pr-6">Demo admin credentials filled!</span>
+        <button onClick={() => setShowToast(false)} className="text-[#10B981] hover:text-white transition ml-auto">
+          <X size={16} />
+        </button>
       </div>
     </div>
   );
 }
-
-
