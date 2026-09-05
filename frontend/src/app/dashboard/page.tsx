@@ -1,6 +1,6 @@
 ﻿import Link from "next/link";
 import { LayoutDashboard, LogOut, CheckCircle } from "lucide-react";
-import { ThemeToggle } from "@/components/ThemeToggle";
+
 
 export default function UserDashboard() {
   return (
@@ -12,7 +12,7 @@ export default function UserDashboard() {
             <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Flowmetrics</h2>
             <p className="text-sm text-gray-500 dark:text-slate-400">User Dashboard</p>
           </div>
-          <ThemeToggle />
+          
         </div>
         <nav className="flex-1 p-4 space-y-2">
           <Link href="/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 transition">
@@ -58,3 +58,4 @@ export default function UserDashboard() {
     </div>
   );
 }
+

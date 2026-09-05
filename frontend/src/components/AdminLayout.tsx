@@ -4,7 +4,7 @@ import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { getMe } from "@/lib/api";
 import { LayoutDashboard, CreditCard, FileText, LogOut } from "lucide-react";
-import { ThemeToggle } from "./ThemeToggle";
+
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -51,7 +51,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Flowmetrics</h2>
             <p className="text-sm text-gray-500 dark:text-slate-400">Admin Panel</p>
           </div>
-          <ThemeToggle />
+          
         </div>
         <nav className="flex-1 p-4 space-y-2">
           <Link href="/admin" className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${pathname === '/admin' ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400' : 'text-gray-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800/50'}`}>
@@ -76,3 +76,4 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     </div>
   );
 }
+

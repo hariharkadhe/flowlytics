@@ -7,7 +7,7 @@ import { login } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Mail, Lock, Key, ArrowRight, CheckCircle, X } from "lucide-react";
-import { ThemeToggle } from "@/components/ThemeToggle";
+
 
 const schema = z.object({
   email: z.string().email("Invalid email"),
@@ -49,9 +49,7 @@ export default function AdminLogin() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-[#0B0C10] p-4 text-gray-900 dark:text-slate-200 font-sans transition-colors duration-300">
-      <div className="absolute top-4 right-4">
-        <ThemeToggle />
-      </div>
+      
       <div className="w-full max-w-md">
         
         <div className="bg-white dark:bg-[#13141C] border border-gray-200 dark:border-slate-800 rounded-2xl shadow-xl dark:shadow-2xl p-8 mb-6 transition-colors duration-300">
@@ -141,3 +139,4 @@ export default function AdminLogin() {
     </div>
   );
 }
+
