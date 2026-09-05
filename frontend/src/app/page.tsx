@@ -1,6 +1,6 @@
 ﻿"use client";
 import { useEffect, useState } from "react";
-import { getPricingPlans } from "@/lib/api";
+import { getPricingPlans } from "@/lib/api";`nimport { useRouter } from "next/navigation";
 import { Check, Star, X } from "lucide-react";
 import Link from "next/link";
 
@@ -16,6 +16,7 @@ export default function Home() {
   const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
   const [checkoutPlan, setCheckoutPlan] = useState<any | null>(null);
   const [checkoutState, setCheckoutState] = useState<'idle' | 'processing' | 'success'>('idle');
+  const router = useRouter();
 
   useEffect(() => {
     getPricingPlans().then(res => {
@@ -147,6 +148,7 @@ export default function Home() {
     </div>
   );
 }
+
 
 
 
