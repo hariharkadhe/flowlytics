@@ -5,6 +5,7 @@ const BlogPostSchema = new Schema({
   slug: { type: String, required: true, unique: true },
   excerpt: { type: String },
   content: { type: String, required: true },
+  thumbnail: { type: String },
   author: { type: String, required: true },
   status: { type: String, enum: ["draft", "published"], default: "draft" },
   featured: { type: Boolean, default: false },
